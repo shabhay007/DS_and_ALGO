@@ -1,7 +1,7 @@
 // LeetCode Medium - 1976
 
 
-// Approach 1 - Dijikstras
+// Approach 1 - Dijkstras
 // T.C. - O(E + (V + E).log(V))
 // S.C. - O(V + E + 3V)
 class Solution {
