@@ -106,7 +106,7 @@ class Solution {
 
 
 // Approach 3 (Optimal) - Sorting + Heap
-// T.C. - O(q + qlog(q) + q.(m.n)log(m.n))
+// T.C. - O(q + qlog(q) + (m.n)log(m.n))
 // S.C. - O(q + m.n + m.n)
 class Solution {
     public int[] maxPoints(int[][] grid, int[] queries) {
@@ -135,11 +135,14 @@ class Solution {
 
         int[] result = new int[q];
 
-        for(int i = 0; i<q; i++){ // O(q)
+        // Note that we won't visit any cell more than once (we mark them visited)
+        // Total cells = m*n and heap can have m*n cells in worst case
+        // O((m.n)log(m.n))
+        for(int i = 0; i<q; i++){
             int value = list.get(i)[0];
             int idx = list.get(i)[1];
 
-            while(!pq.isEmpty() && pq.peek()[0] < value){ // O((m.n)log(m.n))
+            while(!pq.isEmpty() && pq.peek()[0] < value){
                 int[] curr = pq.poll();
                 int currRow = curr[1];
                 int currCol = curr[2];
