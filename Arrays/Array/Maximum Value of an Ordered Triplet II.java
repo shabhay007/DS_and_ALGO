@@ -24,7 +24,7 @@ class Solution {
 
 
 
-// Approach 2 (Better) - Prefix sum concept
+// Approach 2 (Better) - Prefix max & suffix max concept
 // T.C. - O(3n)
 // S.C. - O(2n)
 class Solution {
