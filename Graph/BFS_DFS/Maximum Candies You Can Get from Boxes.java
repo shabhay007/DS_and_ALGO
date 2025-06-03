@@ -109,3 +109,58 @@ class Solution {
         return result;
     }
 }
+
+
+
+
+
+// Approach 3 - BFS
+// T.C. - O(n); visiting all boxes only once
+// S.C. - O(3n)
+class Solution {
+    public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
+        int n = status.length;
+
+        int result = 0;
+        boolean[] visited = new boolean[n];
+        Set<Integer> foundBoxes = new HashSet<>();
+        Queue<Integer> q = new LinkedList<>();
+
+        for(int box : initialBoxes){
+            foundBoxes.add(box);
+
+            if(status[box] == 1){
+                q.offer(box);
+                visited[box] = true;
+                result += candies[box];
+            }
+        }
+
+        while(!q.isEmpty()){
+            int currBox = q.poll();
+
+            for(int nextBox : containedBoxes[currBox]){
+                foundBoxes.add(nextBox);
+
+                if(status[nextBox] == 1 && !visited[nextBox]){
+                    q.offer(nextBox);
+                    visited[nextBox] = true;
+                    result += candies[nextBox];
+                }
+            }
+
+            // storing the keys
+            for(int keyBox : keys[currBox]){
+                status[keyBox] = 1;
+
+                if(foundBoxes.contains(keyBox) && !visited[keyBox]){
+                    q.offer(keyBox);
+                    visited[keyBox] = true;
+                    result += candies[keyBox];
+                }
+            }
+        }
+
+        return result;
+    }
+}
