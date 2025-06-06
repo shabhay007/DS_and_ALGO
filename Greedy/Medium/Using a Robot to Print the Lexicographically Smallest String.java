@@ -121,3 +121,52 @@ class Solution {
         return result.toString();
     }
 }
+
+
+
+
+
+// Approach 3 - Greedy approach using pre-processing min char
+// T.C. - O(2n)
+// S.C. - O(n)
+class Solution {
+    public String robotWithString(String s) {
+        int n = s.length();
+        char[] minInRight = new char[n];
+        minInRight[n-1] = s.charAt(n-1);
+
+        for(int i = n-2; i >= 0; i--){ // O(n)
+            char ch = s.charAt(i);
+
+            if(ch < minInRight[i+1]){
+                minInRight[i] = ch;
+            }
+            else{
+                minInRight[i] = minInRight[i+1];
+            }
+        }
+        
+        StringBuilder t = new StringBuilder();
+        StringBuilder result = new StringBuilder();
+
+        // O(n)
+        // Each char is added to t once and removed once
+        for(int i = 0; i<n; i++){
+            char currCh = s.charAt(i);
+            t.append(currCh);
+
+            char minChar = (i+1 < n) ? minInRight[i+1] : currCh;
+
+            while(t.length() > 0 && t.charAt(t.length() - 1) <= minChar){
+                result.append(t.charAt(t.length() - 1));
+                t.deleteCharAt(t.length() - 1);
+            }
+        }
+
+        // reverse the leftover in t and append in result
+        t.reverse();
+        result.append(t);
+
+        return result.toString();
+    }
+}
