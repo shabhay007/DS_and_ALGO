@@ -2,33 +2,97 @@
 
 
 
-
-// O(E * log(V))
-// E = number of Edges - m*n
-// V = number of vertices - m*n
+// Approach 1 - Dijkstra's Algorithm
+// T.C. - O(m.n * log(m.n))
+// S.C. - O(m.n)
 class Solution {
     public int minimumTime(int[][] grid) {
-        int m = grid.length; 
+        int m = grid.length;
         int n = grid[0].length;
 
-        int[][] directions = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
-
+        // base case
         if(grid[0][1] > 1 && grid[1][0] > 1){
             return -1;
         }
 
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        boolean[][] visited = new boolean[m][n];
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        pq.offer(new int[]{0, 0, 0}); // {currTime, i, j}
+
+        while(!pq.isEmpty()){
+            int[] curr = pq.poll();
+            int currTime = curr[0];
+            int i = curr[1];
+            int j = curr[2];
+
+            if(visited[i][j]) continue;
+            visited[i][j] = true;
+
+            if(i == m-1 && j == n-1){
+                return currTime;
+            }
+
+            // exploring neighbours
+            for(int[] dir : directions){
+                int ni = i + dir[0];
+                int nj = j + dir[1];
+
+                if(ni < m && ni >= 0 && nj < n && nj >= 0 && !visited[ni][nj]){
+                    int newTime = 0;
+
+                    if(currTime + 1 >= grid[ni][nj]){
+                        newTime = currTime + 1;
+                    }
+
+                    // if diff between gridTime and currTime is even
+                    // then gridTime will be the newTime else 
+                    // newTime = gridTime + 1;
+                    else if((grid[ni][nj] - currTime) % 2 == 0){
+                        newTime = grid[ni][nj] + 1;
+                    }
+                    else{
+                        newTime = grid[ni][nj];
+                    }
+
+                    pq.offer(new int[]{newTime, ni, nj});
+                }
+            }
+        }
+
+        return -1;
+    }
+}
+
+
+
+
+// Approach 2 - Dijkstra's Algorithm using result array
+// T.C. - O(m.n * log(m.n))
+// S.C. - O(m.n)
+class Solution {
+    public int minimumTime(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        // base case
+        if(grid[0][1] > 1 && grid[1][0] > 1){
+            return -1;
+        }
+
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        pq.offer(new int[]{0, 0, 0}); // {currTime, i, j}
+
+
         int[][] result = new int[m][n];
         for(int[] row : result){
-            Arrays.fill(row, Integer.MAX_VALUE);
+            Arrays.fill(row, Integer.MAX_VALUE); // not reacheable
         }
 
         result[0][0] = 0;
-
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]); //min-heap
-        pq.offer(new int[]{0, 0, 0}); // {time, i, j}
-
-        // visited matrix
-        boolean[][] vis = new boolean[m][n];
 
         while(!pq.isEmpty()){
             int[] curr = pq.poll();
@@ -37,51 +101,41 @@ class Solution {
             int j = curr[2];
 
             if(i == m-1 && j == n-1){
-                return result[m-1][n-1];
+                return currTime;
             }
 
-            if(vis[i][j] == true){
-                continue;
-            }
+            if(currTime > result[i][j]) continue; // Optional
 
-            vis[i][j] = true;
-
-            // processing neighbours
+            // exploring neighbours
             for(int[] dir : directions){
-                int x = i + dir[0];
-                int y = j + dir[1];
+                int ni = i + dir[0];
+                int nj = j + dir[1];
 
-                // out of bound conditions
-                if(x < 0 || x >= m || y < 0 || y >= n || vis[x][y]){
-                    continue;
-                }
+                if(ni < m && ni >= 0 && nj < n && nj >= 0){
+                    int newTime = 0;
 
-                int newTime = -1;
+                    if(currTime + 1 >= grid[ni][nj]){
+                        newTime = currTime + 1;
+                    }
 
-                if(currTime + 1 >= grid[x][y]){
-                    // pq.offer(new int[]{currTime + 1, x, y});
-                    // result[x][y] = currTime + 1;
-                    newTime = currTime + 1;
-                }
-                else if((grid[x][y] - currTime) % 2 == 0){ // moving back and forth to maintain time
-                    // pq.offer(new int[]{grid[x][y] + 1, x, y});
-                    // result[x][y] = grid[x][y] + 1;
-                    newTime = grid[x][y] + 1;
-                }
-                else{
-                    // moving back and forth to maintain time
-                    // pq.offer(new int[]{grid[x][y], x, y}); 
-                    // result[x][y] = grid[x][y];
-                    newTime = grid[x][y];
-                }
+                    // if diff between gridTime and currTime is even
+                    // then gridTime will be the newTime else 
+                    // newTime = gridTime + 1;
+                    else if((grid[ni][nj] - currTime) % 2 == 0){
+                        newTime = grid[ni][nj] + 1;
+                    }
+                    else{
+                        newTime = grid[ni][nj];
+                    }
 
-                if(newTime < result[x][y]){
-                    result[x][y] = newTime;
-                    pq.offer(new int[]{newTime, x, y});
+                    if(newTime < result[ni][nj]){
+                        pq.offer(new int[]{newTime, ni, nj});
+                        result[ni][nj] = newTime;
+                    }
                 }
             }
         }
 
-        return result[m-1][n-1];
+        return -1;
     }
 }
