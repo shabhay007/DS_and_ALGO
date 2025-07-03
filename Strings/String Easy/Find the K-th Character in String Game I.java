@@ -43,3 +43,18 @@ class Solution {
         return sb.charAt(k-1);
     }
 }
+
+
+
+
+
+// Approach 2 - Bit Manipulation
+// T.C. - O(log(k))
+// S.C. - O(1)
+class Solution {
+    public char kthCharacter(int k) {
+        int shift = Integer.bitCount(k-1);
+
+        return (char) ('a' + shift);
+    }
+}
