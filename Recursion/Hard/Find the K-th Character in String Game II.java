@@ -43,3 +43,41 @@ class Solution {
         return sb.charAt((int) k-1);
     }
 }
+
+
+
+
+
+// Approach 2 - Recursion
+// T.C. - O(log(k))
+// S.C. - O(log(k))
+class Solution {
+    public char kthCharacter(long k, int[] operations) {
+        if(k == 1){
+            return 'a';
+        }
+
+        int n = operations.length;
+        long len = 1;
+        long newK = -1;
+        int operationType = -1;
+
+        for(int i = 0; i<n; i++){ // log(k)
+            len *= 2; // "a", "aa", "aaaa"
+
+            if(len >= k){
+                operationType = operations[i];
+                newK = k - len/2; // k/2, k/4, ...
+                break;
+            }
+        }
+
+        char ch = kthCharacter(newK, operations);
+
+        if(operationType == 0){
+            return ch;
+        }
+
+        return (ch == 'z') ? 'a' : (char) (ch + 1);
+    }
+}
