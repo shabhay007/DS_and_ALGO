@@ -62,3 +62,53 @@ class Solution {
         return minTime;
     }
 }
+
+
+
+
+
+// Approach 2 - DFS + Space optimised (Gives TLE)
+// T.C. - O(4^(n^2))
+// S.C. - O(n^2); recursion space
+class Solution {
+    int n;
+    int minTime = Integer.MAX_VALUE;
+
+    public void dfs(int row, int col, int[][] grid, int[][] directions, int currMax, boolean[][] visited){
+        if(row < 0 || row >= n || col < 0 || col >= n || visited[row][col]){
+            return;
+        }
+
+        visited[row][col] = true;
+        currMax = Math.max(currMax, grid[row][col]);
+
+        if(row == n-1 && col == n-1){
+            minTime = Math.min(minTime, currMax);
+            visited[row][col] = false;
+
+            return;
+        }
+
+        for(int[] dir : directions){
+            int x = row + dir[0];
+            int y = col + dir[1];
+
+            if(x >= 0 && x < n && y >= 0 && y < n && !visited[x][y]){
+                dfs(x, y, grid, directions, currMax, visited);
+            }
+        }
+
+        visited[row][col] = false;
+    }
+
+    public int swimInWater(int[][] grid) {
+        this.n = grid.length;
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        int currMax = -1;
+        boolean[][] visited = new boolean[n][n];
+
+        dfs(0, 0, grid, directions, currMax, visited);
+
+        return minTime;
+    }
+}
