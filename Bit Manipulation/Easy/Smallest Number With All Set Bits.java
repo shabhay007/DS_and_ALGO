@@ -78,3 +78,48 @@ class Solution {
         return (1 << len) - 1;
     }
 }
+
+
+
+
+
+// Approach 5 - Bit Manipulation
+// T.C. - O(log(n))
+// S.C. - O(1)
+class Solution {
+    public int smallestNumber(int n) {
+        int result = 1;
+
+        // uses concept of power of 2
+        while(result < n){
+            result = 2*result + 1;
+        }
+
+        return result;
+    }
+}
+
+
+
+
+
+
+// Approach 6 - Bit Manipulation
+// T.C. - O(log(n))
+// S.C. - O(1)
+class Solution {
+    public boolean isAllBitsSet(int n){
+        return (n & (n+1)) == 0;
+    }
+    
+    public int smallestNumber(int n) {
+        int result = n;
+
+        // uses concept of power of 2
+        while(!isAllBitsSet(result)){
+            result++;
+        }
+
+        return result;
+    }
+}
