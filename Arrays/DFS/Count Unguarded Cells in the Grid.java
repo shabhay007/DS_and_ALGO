@@ -1,6 +1,71 @@
 // LeetCode - 2257 - Medium
 
 
+
+
+// Approach 1 - Matrix Simulation
+// T.C. - O(m * n)
+// S.C. - O(m * n)
+class Solution {
+    public int countUnguarded(int m, int n, int[][] guards, int[][] walls) {
+        int[][] grid = new int[m][n];
+
+        // for guard
+        for(int[] cell : guards){
+            int row = cell[0];
+            int col = cell[1];
+
+            grid[row][col] = 1;
+        }
+
+        // for wall 
+        for(int[] cell : walls){
+            int row = cell[0];
+            int col = cell[1];
+
+            grid[row][col] = -1;
+        }
+
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+        for(int[] guard : guards){
+            int x = guard[0];
+            int y = guard[1];
+
+            for(int[] dir : directions){
+                int nx = x + dir[0];
+                int ny = y + dir[1];
+
+                while(nx >= 0 && nx < m && ny >= 0 && ny < n 
+                    && grid[nx][ny] != -1 && grid[nx][ny] != 1){
+                    if(grid[nx][ny] == 0){
+                        grid[nx][ny] = 2; // marking guarded
+                    }
+
+                    nx += dir[0];
+                    ny += dir[1];
+                }
+            }
+        }
+
+        int notGuardedCells = 0;
+
+        for(int row = 0; row < m; row++){
+            for(int col = 0; col < n; col++){
+                if(grid[row][col] != 1 && grid[row][col] != -1 && 
+                   grid[row][col] != 2)
+                    notGuardedCells++;
+            }
+        }
+
+        return notGuardedCells;
+    }
+}
+
+
+
+
+
 // Optimal - Matrix Simulation
 class Solution {
     public void markForGuarded(int row, int col, int[][] grid){
