@@ -35,7 +35,6 @@ class Solution {
 
 
 
-
 // Approach 2 - Difference Array Technique
 // T.C. - O(q*n + n^2); q = queries.length
 // S.C. - O(1)
