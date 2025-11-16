@@ -30,3 +30,35 @@ class Solution {
         return (int) result;
     }
 }
+
+
+
+
+
+
+// Approach 2 - Maths
+// T.C. - O(n)
+// S.C. - O(1)
+class Solution {
+    public int numSub(String s) {
+        int n = s.length();
+        int mod = (int) 1e9 + 7;
+        int result = 0;
+        int oneCount = 0;
+
+        // sum of n natural numbers
+        for(int i = 0; i<n; i++){
+            char ch = s.charAt(i);
+
+            if(ch == '1'){
+                oneCount++;
+                result = (result + oneCount) % mod;
+            }
+            else{
+                oneCount = 0;
+            }
+        }
+
+        return result;
+    }
+}
