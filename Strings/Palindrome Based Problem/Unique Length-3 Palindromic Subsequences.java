@@ -161,3 +161,57 @@ class Solution {
         return count;
     }
 }
+
+
+
+
+// Approach 5 - Map to track first and last occurrence
+// T.C. - O(26*n)
+// S.C. - O(1)
+class Solution {
+    public int countPalindromicSubsequence(String s) {
+        int n = s.length();
+
+        // O(1) -> 26 chars with int[2] values
+        // storing first and last occurrence
+        Map<Character, int[]> map = new HashMap<>();
+
+        for(int i = 0; i<n; i++){
+            char ch = s.charAt(i);
+
+            if(!map.containsKey(ch)){
+                map.put(ch, new int[]{i, i});
+            }
+            else{
+                // updating last occurrence
+                map.get(ch)[1] = i;
+            }
+        }
+
+        // now traversing in map and finding unique chars
+        // for 3 length palindromic subsequences, finding unique chars
+        // in between 2 same characters
+        int result = 0;
+
+        for(int[] indices : map.values()){
+            int start = indices[0];
+            int end = indices[1];
+
+            if(start == end){
+                continue;
+            }
+
+            // O(1) -> 26 chars max
+            Set<Character> set = new HashSet<>();
+
+            for(int i = start+1; i<end; i++){
+                char ch = s.charAt(i);
+                set.add(ch);
+            }
+
+            result += set.size();
+        }
+
+        return result;
+    }
+}
