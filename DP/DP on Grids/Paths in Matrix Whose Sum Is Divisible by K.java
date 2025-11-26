@@ -82,3 +82,44 @@ class Solution {
         return getPaths(0, 0, 0, grid, k, m, n, dp);
     }
 }
+
+
+
+
+
+// Approach 3 - DP (Bottom Up)
+// T.C. - O(m*n*k)
+// S.C. - O(m*n*k)
+class Solution {
+    public int numberOfPaths(int[][] grid, int k) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int mod = (int) 1e9 + 7;
+
+        int[][][] dp = new int[m+1][n+1][k];
+
+        // base case same as recursion
+        for(int rem = 0; rem < k; rem++){
+            dp[m-1][n-1][rem] = ((rem + grid[m-1][n-1]) % k == 0) ? 1 : 0;
+        }
+
+        for(int i = m-1; i>=0; i--){
+            for(int j = n-1; j>=0; j--){
+                for(int rem = 0; rem < k; rem++){
+                    if(i == m-1 && j == n-1){
+                        continue;
+                    }
+
+                    int currRem = (rem + grid[i][j]) % k;
+
+                    int right = dp[i+1][j][currRem];
+                    int down = dp[i][j+1][currRem];
+
+                    dp[i][j][rem] = (right + down) % mod;
+                }
+            }
+        }
+
+        return dp[0][0][0];
+    }
+}
