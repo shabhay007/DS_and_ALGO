@@ -1,4 +1,4 @@
-// LeetCode - 3531
+// LeetCode Medium - 3531
 
 
 
