@@ -138,3 +138,104 @@ class Solution {
         return 0;
     }
 }
+
+
+
+
+
+
+// Approach 4 - Optimised using 2-D matrix prefix sum
+// T.C. - O(m * n * Math.min(m,n))
+// S.C. - O(m*n)
+class Solution {
+    public int maxSideLength(int[][] mat, int threshold) {
+        int m = mat.length;
+        int n = mat[0].length;
+        int[][] prefixSum = new int[m][n];
+
+        // Build 2D prefix sum
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                prefixSum[i][j] = mat[i][j] 
+                                + ((i > 0) ? prefixSum[i-1][j] : 0)
+                                + ((j > 0) ? prefixSum[i][j-1] : 0)
+                                - ((i > 0 && j > 0) ? prefixSum[i-1][j-1] : 0);
+            }
+        }
+
+        // Check all possible squares from largest to smallest
+        for(int k = Math.min(m, n); k >= 1; k--) {
+            for(int i = 0; i <= m-k; i++) {
+                for(int j = 0; j <= n-k; j++) {
+                    int r2 = i+k-1;
+                    int c2 = j+k-1;
+
+                    int sum = prefixSum[r2][c2]
+                            - ((j > 0) ? prefixSum[r2][j-1] : 0)
+                            - ((i > 0) ? prefixSum[i-1][c2] : 0)
+                            + ((i > 0 && j > 0) ? prefixSum[i-1][j-1] : 0);
+
+                    if(sum <= threshold){
+                        return k;
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
+}
+
+
+
+
+
+
+
+// Approach 5 - Optimised using 2-D matrix prefix sum
+// T.C. - O(m * n * Math.min(m,n))
+// S.C. - O(m*n)
+class Solution {
+    public int maxSideLength(int[][] mat, int threshold) {
+        int m = mat.length;
+        int n = mat[0].length;
+        int[][] prefixSum = new int[m][n];
+
+        // Build 2D prefix sum
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                prefixSum[i][j] = mat[i][j] 
+                                + ((i > 0) ? prefixSum[i-1][j] : 0)
+                                + ((j > 0) ? prefixSum[i][j-1] : 0)
+                                - ((i > 0 && j > 0) ? prefixSum[i-1][j-1] : 0);
+            }
+        }
+        
+        int best = 0;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                for(int k = best; k < Math.min(m-i, n-j); k++){
+                    int r2 = i+k;
+                    int c2 = j+k;
+
+                    int sum = prefixSum[r2][c2]
+                            - ((j > 0) ? prefixSum[r2][j-1] : 0)
+                            - ((i > 0) ? prefixSum[i-1][c2] : 0)
+                            + ((i > 0 && j > 0) ? prefixSum[i-1][j-1] : 0);
+
+                    // side of sq = offset + 1;
+                    if(sum <= threshold){
+                        best = k+1;
+                    }
+                    else{
+                        // if this sq. sum is not valid, then other large sq.
+                        // from this start point will also not valid
+                        break;
+                    }
+                }
+            }
+        }
+
+        return best;
+    }
+}
