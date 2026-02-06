@@ -50,3 +50,42 @@ class Solution {
         return minNum;
     }
 }
+
+
+
+
+
+// Approach 2 - Sorting + Sliding Window
+// T.C. - O(nlog(n) + 2n)
+// S.C. - O(1)
+class Solution {
+    public int minRemoval(int[] nums, int k) {
+        int n = nums.length;
+        int maxL = 1;
+
+        Arrays.sort(nums);
+
+        int i = 0;
+        int j = 0;
+        int maxEl = nums[0];
+        int minEl = nums[0];
+
+        while(j < n){
+            minEl = nums[i];
+            maxEl = nums[j];
+            long target = (long) minEl * k;
+
+            if(i < j && maxEl > target){
+                i++;
+                minEl = nums[i];
+            }
+
+            // finding max length subarray so that, we can minimize the no of removal
+            maxL = Math.max(maxL, j-i+1);
+
+            j++;
+        }
+
+        return n - maxL;
+    }
+}
