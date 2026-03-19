@@ -58,3 +58,45 @@ class Solution {
 
 
 
+// Approach 2 - Grid Prefix Sum
+// T.C. - O(m * n)
+// S.C. - O(m * n)
+class Solution {
+    public int numberOfSubmatrices(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] cumSumX = new int[m][n];
+        int[][] cumSumY = new int[m][n];
+        int count = 0;
+
+        for(int row = 0; row<m; row++){
+            for(int col = 0; col<n; col++){
+                cumSumX[row][col] = (grid[row][col] == 'X') ? 1 : 0;
+                cumSumY[row][col] = (grid[row][col] == 'Y') ? 1 : 0;
+
+                // processing prefix sum
+                if(row > 0){
+                    cumSumX[row][col] += cumSumX[row-1][col];
+                    cumSumY[row][col] += cumSumY[row-1][col];
+                }
+
+                if(col > 0){
+                    cumSumX[row][col] += cumSumX[row][col-1];
+                    cumSumY[row][col] += cumSumY[row][col-1];
+                }
+
+                if(row > 0 && col > 0){
+                    cumSumX[row][col] -= cumSumX[row-1][col-1];
+                    cumSumY[row][col] -= cumSumY[row-1][col-1];
+                }
+
+                // processing count
+                if(cumSumX[row][col] > 0 && cumSumX[row][col] == cumSumY[row][col]){
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
