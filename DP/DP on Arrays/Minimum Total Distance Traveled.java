@@ -55,3 +55,49 @@ class Solution {
         return solve(0, 0, robot, positions, dp);
     }
 }
+
+
+
+
+
+
+// Approach 2 - DP (Bottom Up)
+// T.C. - O(n * factorySize)
+// S.C. - O(n * factorySize)
+class Solution {
+    int n;
+    public long minimumTotalDistance(List<Integer> robot, int[][] factory) {
+        n = robot.size();
+
+        // Sorting for easy tracking
+        Collections.sort(robot);
+        Arrays.sort(factory, (a, b) -> Integer.compare(a[0], b[0]));
+
+        // expanding factory a/c to limit to avoid limit tracking
+        List<Integer> positions = new ArrayList<>();
+        for(int[] f : factory){
+            for(int i = 0; i<f[1]; i++){
+                positions.add(f[0]);
+            }
+        }
+
+        int factorySize = positions.size();
+
+        long[][] dp = new long[n+1][positions.size()+1];
+        for(int i = 0; i<n; i++){
+            dp[i][factorySize] = (long) 1e12; // no factories left to repair
+        }
+
+        // filling DP table using bottom up
+        for(int i = n-1; i >= 0; i--){
+            for(int j = factorySize - 1; j >= 0; j--){
+                long take = Math.abs(positions.get(j) - robot.get(i)) + dp[i+1][j+1];
+                long skip = dp[i][j+1];
+
+                dp[i][j] = Math.min(take, skip);
+            }
+        }
+        
+        return dp[0][0];
+    }
+}
