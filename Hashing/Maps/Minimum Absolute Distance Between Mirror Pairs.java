@@ -67,3 +67,45 @@ class Solution {
         return (min == Integer.MAX_VALUE) ? -1 : min;
     }
 }
+
+
+
+
+
+
+// Approach 3 - Map + Math
+// T.C. - O(n)
+// S.C. - O(n)
+class Solution {
+    public int getReverse(int num){
+        int reverse = 0;
+
+        while(num > 0){
+            reverse = reverse * 10 + (num % 10);
+            num /= 10;
+        }
+
+        return reverse;
+    }
+
+    public int minMirrorPairDistance(int[] nums) {
+        int n = nums.length;
+
+        Map<Integer, Integer> map = new HashMap<>();
+        int min = Integer.MAX_VALUE;
+
+        for(int i = n-1; i >= 0; i--){
+            int reverseNum = getReverse(nums[i]);
+
+            if(!map.isEmpty() && map.containsKey(reverseNum)){
+                min = Math.min(min, map.get(reverseNum) - i);
+            }
+            
+            // it will handle duplicate also, as idx gets updated to most recent
+            // which have min distance
+            map.put(nums[i], i);
+        }
+
+        return (min == Integer.MAX_VALUE) ? -1 : min;
+    }
+}
