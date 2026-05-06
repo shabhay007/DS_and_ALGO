@@ -114,3 +114,59 @@ class Solution {
         return result;
     }
 }
+
+
+
+
+
+// Approach 3 - Matrix Manipulation
+// T.C. - O(m * n)
+// S.C. - O(1)
+class Solution {
+    public char[][] rotateTheBox(char[][] boxGrid) {
+        int m = boxGrid.length;
+        int n = boxGrid[0].length;
+        char[][] result = new char[n][m];
+
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<m; j++){
+                result[i][j] = '.';
+            }
+        }
+
+        for(int row = 0; row < m; row++){
+            int stone = 0;
+
+            for(int col = 0; col < n; col++){
+                if(boxGrid[row][col] == '#'){
+                    stone++;
+                }
+                else if(boxGrid[row][col] == '*'){
+                    result[col][m-1-row] = '*';
+                    int j = col - 1;
+
+                    while(stone > 0 && j >= 0){ // O(m)
+                        result[j][m-1-row] = '#';
+                        stone--;
+                        j--;
+                    }
+
+                    // resetting stone
+                    stone = 0;
+                }
+            }
+
+            int j = n-1;
+            while(stone > 0 && j >= 0){
+                if(result[j][m-1-row] == '.'){
+                    result[j][m-1-row] = '#';
+                    stone--;
+                }
+
+                j--;
+            }
+        }
+
+        return result;
+    }
+}
