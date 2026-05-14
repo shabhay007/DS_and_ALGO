@@ -35,3 +35,37 @@ class Solution {
         return true;
     }
 }
+
+
+
+
+
+// Approach 2 - Array + Simulation
+// T.C. - O(n)
+// S.C. - O(1)
+class Solution {
+    public boolean isGood(int[] nums) {
+        int n = nums.length;
+        int max = 0;
+
+        for(int num : nums){
+            max = Math.max(max, num);
+        }
+
+        if(n != max+1){
+            return false;
+        }
+        
+        int[] freq = new int[201];
+        for(int num : nums){
+            freq[num]++;
+        }
+
+        // processing
+        for(int i = 1; i<max; i++){
+            if(freq[i] != 1) return false;
+        }
+
+        return freq[max] == 2;
+    }
+}
