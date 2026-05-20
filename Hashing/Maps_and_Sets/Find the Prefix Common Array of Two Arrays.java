@@ -123,3 +123,68 @@ class Solution {
 
 
 
+
+
+
+// Approach 1 - Set
+// T.C. - O(n)
+// S.C. - O(n)
+class Solution {
+    public int[] findThePrefixCommonArray(int[] A, int[] B) {
+        int n = A.length;
+        int common = 0;
+        int[] result = new int[n];
+        Set<Integer> setA = new HashSet<>();
+        Set<Integer> setB = new HashSet<>();
+
+        for(int i = 0; i<n; i++){
+            if(setB.contains(A[i])){
+                common++;
+            }
+
+            setA.add(A[i]);
+
+            if(setA.contains(B[i])){
+                common++;
+            }
+
+            setB.add(B[i]);
+
+            result[i] = common;
+        }
+
+        return result;
+    }
+}
+
+
+
+
+
+// Approach 2 - Frequency Array (Most Optimal)
+// T.C. - O(n)
+// S.C. - O(n)
+class Solution {
+    public int[] findThePrefixCommonArray(int[] A, int[] B) {
+        int n = A.length;
+        int common = 0;
+        int[] result = new int[n];
+        int[] temp = new int[n+1];
+
+        for(int i = 0; i<n; i++){
+            temp[A[i]]++;
+            if(temp[A[i]] == 2){
+                common++;
+            }
+
+            temp[B[i]]++;
+            if(temp[B[i]] == 2){
+                common++;
+            }
+
+            result[i] = common;
+        }
+
+        return result;
+    }
+}
