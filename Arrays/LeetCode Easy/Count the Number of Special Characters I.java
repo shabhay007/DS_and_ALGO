@@ -32,3 +32,32 @@ class Solution {
         return count;
     }
 }
+
+
+
+
+
+
+// Approach 2 - Set
+// T.C. - O(n)
+// S.C. - O(n)
+class Solution {
+    public int numberOfSpecialChars(String word) {
+        int n = word.length();
+        Set<Character> set = new HashSet<>();
+
+        for(char ch : word.toCharArray()){
+            set.add(ch);
+        }
+
+        // processing
+        int count = 0;
+        for(char ch = 'a'; ch <= 'z'; ch++){
+            if(set.contains(ch) && set.contains(Character.toUpperCase(ch))){
+                count++;
+            }
+        }
+
+        return count;
+    }
+}
