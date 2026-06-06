@@ -30,3 +30,35 @@ class Solution {
         return result;
     }
 }
+
+
+
+
+
+// Approach 2 - Two Pointers
+// T.C. - O(n)
+// S.C. - O(1)
+class Solution {
+    public int[] leftRightDifference(int[] nums) {
+        int n = nums.length;
+
+        // calculating total sum
+        int totalSum = 0;
+        for(int i = 0; i<n; i++){
+            totalSum += nums[i];
+        }
+
+        // processing result
+        int leftSum = 0;
+        int rightSum = totalSum;
+        int[] result = new int[n];
+
+        for(int i = 0; i<n; i++){
+            leftSum += nums[i];
+            result[i] = Math.abs(leftSum - rightSum);
+            rightSum -= nums[i];
+        }
+
+        return result;
+    }
+}
