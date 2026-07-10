@@ -162,3 +162,84 @@ class Solution {
         return result;
     }
 }
+
+
+
+
+
+
+// Approach 3 - Using rank instead of size array
+// T.C. - O(n.alpha(n) + n.alpha(q))
+// S.C. - O(n)
+class DSU{
+    int[] parent;
+    int[] rank;
+
+    public DSU(int n){
+        this.parent = new int[n];
+        this.rank = new int[n];
+
+        for(int i = 0; i<n; i++){
+            parent[i] = i; // initially every node is parent of itself
+            rank[i] = 1;
+        }
+    }
+
+    public int find(int x){
+        if(x == parent[x]){
+            return x;
+        }
+
+        return parent[x] = find(parent[x]); // path compression
+    }
+
+    public void union(int x, int y){
+        int xParent = find(x);
+        int yParent = find(y);
+
+        if(xParent == yParent){
+            return;
+        }
+
+        // union by rank
+        if(rank[xParent] > rank[yParent]){
+            parent[yParent] = xParent;
+        }
+        else if(rank[xParent] < rank[yParent]){
+            parent[xParent] = yParent;
+        }
+        else{
+            parent[yParent] = xParent;
+            rank[xParent]++;
+        }
+    }
+}
+
+class Solution {
+    public boolean[] pathExistenceQueries(int n, int[] nums, int maxDiff, int[][] queries) {
+        DSU dsu = new DSU(n);
+
+        for(int i = 0; i<n-1; i++){
+            int diff = Math.abs(nums[i] - nums[i+1]);
+
+            if(diff <= maxDiff){
+                dsu.union(i, i+1);
+            }
+        }
+
+        // processing the queries
+        int q =queries.length;
+        boolean[] result = new boolean[q];
+
+        for(int i = 0; i<q; i++){
+            int uParent = dsu.find(queries[i][0]);
+            int vParent = dsu.find(queries[i][1]);
+
+            if(uParent == vParent){
+                result[i] = true;
+            }
+        }
+
+        return result;
+    }
+}
