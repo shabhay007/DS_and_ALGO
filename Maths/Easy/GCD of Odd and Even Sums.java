@@ -36,3 +36,23 @@ class Solution {
         return gcd(oddSum, evenSum);
     }
 }
+
+
+
+
+
+
+// Approach 2 - Maths
+// T.C. - O(1)
+// S.C. - O(1)
+class Solution {
+    public int gcdOfOddEvenSums(int n) {
+        /** 
+            oddSum = 1 + 3 + 5 + ... + (2n-1) = n^2
+            evenSum = 2 + 4 + 6 + ... + 2n = n(n+1)
+            GCD(n^2, n(n+1)) = n * GCD(n, n+1) = n * 1 = n
+        */
+        
+        return n;
+    }
+}
