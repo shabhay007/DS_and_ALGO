@@ -24,3 +24,33 @@ class Solution {
         }
     }
 }
+
+
+
+
+
+
+// Approach 2 - Greedy + Sorting
+// T.C. - O(n)
+// S.C. - O(1)
+class Solution {
+    public int minimumPushes(String word) {
+        Integer[] count = new Integer[26];
+        Arrays.fill(count, 0); // as by default, it initializes with null
+
+        for(char ch : word.toCharArray()){
+            count[ch - 'a']++;
+        }
+
+        Arrays.sort(count, (a, b) -> b - a); // descending order
+
+        int result = 0;
+        for(int i = 0; i<26; i++){
+            int freq = count[i];
+            int noOfPress = (i/8) + 1;
+            result += freq * noOfPress;
+        }
+
+        return result;
+    }
+}
