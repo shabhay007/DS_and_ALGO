@@ -63,3 +63,40 @@ class Solution {
         return result;
     }
 }
+
+
+
+
+
+
+// Approach 3 - Greedy + Reverse Processing
+// T.C. - O(n)
+// S.C. - O(1)
+class Solution {
+    public int minimumPushes(String word) {
+        int[] count = new int[26];
+        for(char ch : word.toCharArray()){
+            count[ch - 'a']++;
+        }
+
+        Arrays.sort(count);
+
+        int result = 0;
+        for(int i = 0; i<26; i++){ // processing in reverse order
+            if(i < 2){
+                result += 4 * count[i];
+            }
+            else if(i < 10){
+                result += 3 * count[i];
+            }
+            else if(i < 18){
+                result += 2 * count[i];
+            }
+            else{
+                result += count[i];
+            }
+        }
+
+        return result;
+    }
+}
