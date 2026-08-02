@@ -42,3 +42,21 @@ class Solution {
         return aliceStones >= bobStones;
     }
 }
+
+
+
+
+
+
+// Approach 2 - Observation
+// T.C. - O(1)
+// S.C. - O(1)
+class Solution {
+    public boolean stoneGame(int[] piles) {
+        /*
+            Since alice starts first she can choose all the even indices and accumulate stones or all the odd indices
+            So, she will choose in a way so that she will win.
+        */
+        return true;
+    }
+}
