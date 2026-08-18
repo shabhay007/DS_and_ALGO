@@ -77,3 +77,53 @@ class Solution {
         return result;
     }
 }
+
+
+
+
+
+
+// Approach 3 - Observation Based + hash array
+// T.C. - O(n)
+// S.C. - O(1)
+class Solution {
+    public int largestInteger(int[] nums, int k) {
+        int n = nums.length;
+        int[] freq = new int[51];
+        int max = -1;
+
+        for(int num : nums){
+            freq[num]++;
+            max = Math.max(max, num);
+        }
+
+        // case I
+        if(k == n){
+            return max;
+        }
+
+        // case II
+        if(k == 1){
+            for(int i = 50; i>=0; i--){
+                if(freq[i] == 1){
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        // case III
+        int result = -1;
+
+        if(freq[nums[0]] == 1){
+            result = Math.max(result, nums[0]);
+        }
+
+        if(freq[nums[n-1]] == 1){
+            result = Math.max(result, nums[n-1]);
+        }
+
+        return result;
+    }
+}
