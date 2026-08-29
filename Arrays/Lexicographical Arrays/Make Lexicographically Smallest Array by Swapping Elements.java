@@ -85,3 +85,58 @@ class Solution {
         return nums;
     }
 }
+
+
+
+
+
+
+
+// Approach 3 - Slight change in Approach 2
+// T.C. - O(nlog(n))
+// S.C. - O(n)
+class Solution {
+    public int[] lexicographicallySmallestArray(int[] nums, int limit) {
+        int n = nums.length;
+        int[] arr = nums.clone();
+        Arrays.sort(arr);
+
+        int group = 0;
+        Map<Integer, LinkedList<Integer>> groupToList = new HashMap<>();
+        Map<Integer, Integer> numToGroup = new HashMap<>();
+
+        int i = 0;
+        while(i < n){
+            // storing all the numbers having diff <= limit in same group
+            groupToList.put(group, new LinkedList<>());
+            groupToList.get(group).add(arr[i]);
+
+            // storing which group this number belongs to
+            numToGroup.put(arr[i], group);
+
+            while(i+1 < n && arr[i+1] - arr[i] <= limit){
+                groupToList.get(group).add(arr[i+1]);
+
+                // storing which numbers falls in which group
+                numToGroup.put(arr[i+1], group);
+                i++;
+            }
+
+            group++;
+            i++;
+        }
+
+        // processing for answers
+        int[] result = new int[n];
+
+        for(i = 0; i<n; i++){
+            // finding the element present in which group
+            int elementGroup = numToGroup.get(nums[i]);
+
+            // smallest available number in this group
+            result[i] = groupToList.get(elementGroup).pollFirst();
+        }
+
+        return result;
+    }
+}
